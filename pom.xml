@@ -292,43 +292,64 @@
     </dependencies>
 
     <!-- Maven plugin versions are mentioned in order to guarantee the build reproducibility in the long term -->
-    <build>
-        <defaultGoal>install</defaultGoal>
-        <finalName>petclinic</finalName>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <!-- declared explicitly so Spring config files can be placed next to their corresponding JUnit test class  -->
-                <directory>${project.basedir}/src/test/java</directory>
-            </testResource>
-            <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
-            </testResource>
-        </testResources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-            </plugin>
+<build>
+    <defaultGoal>install</defaultGoal>
+    <finalName>petclinic</finalName>
+    <resources>
+        <resource>
+            <directory>${basedir}/src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
+    <testResources>
+        <testResource>
+            <!-- declared explicitly so Spring config files can be placed next to their corresponding JUnit test class  -->
+            <directory>${project.basedir}/src/test/java</directory>
+        </testResource>
+        <testResource>
+            <directory>${project.basedir}/src/test/resources</directory>
+        </testResource>
+    </testResources>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${maven-compiler-plugin.version}</version>
+        </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+                <includes>
+                    <include>**/*Tests.java</include>
+                </includes>
+            </configuration>
+        </plugin>
 
-            <plugin>
+        <!-- ✅ Added JaCoCo plugin for code coverage -->
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${jacoco-maven-plugin}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>report</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${maven-war-plugin.version}</version>
@@ -437,10 +458,10 @@
                         <version>${mockito.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
 
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
+                    </plugin>
+        <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty-maven-plugin.version}</version>
             </plugin>
@@ -533,6 +554,8 @@
                 <jdbc.url>jdbc:postgresql://localhost:5432/petclinic</jdbc.url>
                 <jdbc.username>postgres</jdbc.username>
                 <jdbc.password>petclinic</jdbc.password>
+                <jacoco-maven-plugin>0.8.6</jacoco-maven-plugin>
+
             </properties>
             <dependencies>
                 <dependency>
